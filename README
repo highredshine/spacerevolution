@@ -1,0 +1,117 @@
+README <Cartoon>
+
+HANDIN: final
+
+DESIGN CHOICES
+
+For the Cartoon project, I created the Solar System.
+The program consists of two windows: the upper section shows the JavaFX graphics,
+the lower section shows the controlling elements of the graphics.
+
+The graphics consist of:
+1. Star: Sun
+2. Planets: Mercury, Venus, Earth, and Mars
+3. Satellites: Moon(for Earth), Phobos and Deimos(for Mars)
+4. Background: Milky
+
+The control consists of:
+1. Radio Buttons: User can choose which planet system to show up on the screen.
+2. Time: When the application is started, the new universe has been created.
+         The time of the start is arbitrarily set to Jan 01, 2019.
+         As the planet revolves around the star, the time changes.
+         The date, month, and the season changes as it moves.
+         When one full revolution is finished, one year has been passed.
+3. Explanations: User can make new inputs to the GUI, with keyboard and mouse.
+   Input
+   1. Keyboard
+      - Space Bar: You can stop or resume the rotations and revolutions.
+      - Arrow Keys: You can speed up or speed down the rotations and revolutions.
+   2. Mouse:
+      - You can click anywhere in the graphics section to create a small star.
+   This section explains these elements to the user.
+4. Quit Button: If pressed, the program is quit.
+
+In order to implement these features, the following classes were made.
+
+1. CartoonGraphics: this is a short superclass that other classes can extend from.
+All of the graphics in this program uses an image url (thus, to run the program,
+internet connection is required!), so this class has a method to check if the url
+is valid, and if not, uses a certain color instead of the image.
+
+2. Celestial: this is the most foundational superclass of the program.
+Conceptually, all suns, planets, and satellites are astronomical "celestial" bodies,
+so this class is named Celestial. This class has methods that all the classes for
+these astronomical bodies share, like setting location and coloring with image.
+This class thus extends from the CartoonGraphics.
+
+3. Revolvable (interface): this is an interface that is shared by planets and
+satellites. Planets revolve around stars, and satellites revolve around planets.
+Thus, an interface was apt to make common methods for setting the orbits for
+revolutions.
+
+4. Star, Planet, and Satellite classes: These classes look similar, but they
+have different purposes and therefore slightly different methods. First of all,
+each of these classes contain a sphere that designates the respective celestial body
+(all extend from Celestial class). All of these therefor have the rotation property.
+But the star does not revolve, so it does not implement the Revolvable interface.
+For the revolution, Planet class uses PathTransition while Satellite class uses
+Rotate. Thus, Planet class also has methods to set up the transition.
+
+5. Calculator: As the planets move around, it is essential to update the time
+of the universe. Calculator class thus have methods to measure where the planet
+is on its revolution path, and generates data for day, month, season, and year.
+
+6. Cartoon: Cartoon class then contains all these classes above, and creates
+the composite graphics as well as controlling elements. What to note of this
+class is that it has several event handlers to manage various buttons,
+keyboard events, mouse events, and the timeline to continuously run the animation.
+
+7. PaneOrganizer: This is a top-level object of this program that combines
+the graphical elements created into one single area.
+
+
+KNOWN BUGS:
+
+1. TimeHandler efficiency:
+A lot of instance variables are used in the cartoon class to constantly update
+several data of this program. One example would be the angles to set up the rotations
+of the various spheres. I tried to create generic methods to lessen the code lines,
+i.e. updating the angle or the rate of the transitions. This would have been efficient,
+since these methods would be a part of the smaller classes like Planet or Satellite,
+and I don't have to have algorithms for all of the planets and satellites
+instantiated in the Cartoon class, and manage all of them together in the
+TimeHandler. A lot of NullPointerExceptions and Invocation errors occurred
+when I tried this, so I had to give this up and implement everything inside the
+TimeHandler.
+
+2. KeyHandler bug:
+The main input process of this program is using keyboard arrows to control
+the speed of "time," so that the universe can roll faster, or slower. That means that
+all the spheres will rotate around themselves faster/slower, and revolutions will be
+faster/slower. The KeyHandler works excellently; the world can stop, resume, slow down,
+and speed up. One minor issue with this is that when the speed arrives to 0,
+the world does stop, and graphically it has the same effect has pressing the space
+bar, which stops the animation. However, when we press arrows again to either ways,
+the animation starts not at the same place, but a different place, with the planet
+either little more progressed or retreated on the path. I tried to set up the
+rate variable in many ways, and even used animation's pause methods, but
+none of them worked. This seems to be only bug I currently have.
+
+Notes:
+1. Minimum Qualification
+  a. Timeline: in the Cartoon class
+  b. Composite Shape: 15 shapes (8 spheres, 7 ellipses), 3 types (sphere, ellipse, polygon)
+  c. Label: time update
+  d. KeyHandler: time speed changes
+  e. Pane: cartoonPane that has everything
+  f. Layout: use of VBox and GridPane
+  g. Quit Button: on the bottom right of the screen
+  h. README File
+2. Bells and Whistles
+  a. other JavaFX elements: Radio Button group (choose planet system to show)
+  b. Mouse interaction: click and create stars
+  c. Images: all spheres are colored with phong materials based on images
+  d. 3D shapes: spheres rotate.
+  e. Fancy Transitions: PathTransitions, and use of Rotate.
+  f. Effects: Glow effect on stars
+  g. Different speeds: speed can change through keyboard inputs.
